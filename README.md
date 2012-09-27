@@ -1,4 +1,4 @@
 CA
 ==
 
-Cellular Automata 3rd Year Oroject
+Cellular Automata 3rd Year Project
