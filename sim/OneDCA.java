@@ -1,9 +1,11 @@
-package simulator;
+package sim;
 import java.util.Arrays;
-public class OneDSimulator {
-	private CA _automaton;
-	public OneDSimulator(CA automaton){
-		_automaton = automaton;
+public class OneDCA {
+	private int[] ruleTable;
+	private int radius;
+	public OneDCA(int[] ruleTable, int radius){
+		this.ruleTable = ruleTable;
+		this.radius = radius;
 	}
 	public int[][] simulate(int latticeSize,int[] IC,int turns){
 		int[][] output = new int[turns+1][latticeSize];
@@ -21,26 +23,24 @@ public class OneDSimulator {
 	}//oneIteration
 	private void changeState(int latticeSize,int centerIndex,
 						int[] currentLattice,int[] previousLattice){
-		int leftMost = ((centerIndex-_automaton.getRadius()) 
-				+ latticeSize)%latticeSize;
+		int leftMost = ((centerIndex-radius) + latticeSize)%latticeSize;
 		int rule=0;
-		for(int i=1;i<(2*_automaton.getRadius() + 2);i= i + 1){
-			rule+=previousLattice[(leftMost+(i-1))%latticeSize]<<
-					((2*_automaton.getRadius()+1)-i);
+		for(int i=1;i<(2*radius + 2);i= i + 1){
+			rule+=previousLattice[(leftMost+(i-1))%latticeSize]<<((2*radius+1)-i);
 		}
-		currentLattice[centerIndex]=_automaton.parseRule(rule);
+		currentLattice[centerIndex]=ruleTable[rule];
 	}//changeState
 	public static void main(String[] args){
-		CA automaton = new CA(110,3,3);
-		OneDSimulator newAutomata = new OneDSimulator(automaton);
-		ICGenerator icg = new ICGenerator(3);
-		int[] ic = icg.getIC1D(149);
-		int[][] result = newAutomata.simulate(149, ic, 300);
-		for(int time=0;time<300;time++){
-			for(int i=0;i<149;i++){
-				System.out.print(result[time][i]);
+		int[] IC = new int[]{0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0};
+		OneDCA someCA = new OneDCA(new int[]{0,1,1,0,1,1,1,0},1);
+		int[][] output=
+				someCA.simulate(21,IC,41);
+		for(int row=0;row<41;row++){
+			for(int col=0;col<21;col++){
+				System.out.print(output[row][col]);
 			}
 			System.out.println();
 		}
+		System.out.println(Integer[].class.getName());
 	}
 }
