@@ -1,5 +1,7 @@
 package simulator;
 
+import probabilityModel.BitModel;
+
 public class ThreeDSimulator {
 	private CA _automaton;
 	public ThreeDSimulator(CA automaton){
@@ -51,7 +53,8 @@ public class ThreeDSimulator {
 		CA someCA = new CA(10241024,3,2);
 		int latticeSize=4;
 		ThreeDSimulator ThreeDS = new ThreeDSimulator(someCA);
-		ICGenerator newIC = new ICGenerator(2);
+		BitModel bitModel = new BitModel(7);
+		ICGenerator newIC = new ICGenerator(bitModel);
 		int[][][] ic = newIC.getIC3D(4);
 		int[][][][] result = ThreeDS.simulate(4, ic, 2);
 		for(int turns=0;turns<3;turns++){

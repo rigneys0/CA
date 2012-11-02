@@ -1,11 +1,10 @@
 package simulator;
-import java.util.Random;
-public class ICGenerator {
-	private Random _numberGen;
-	private int _numberOfStates;
-	public ICGenerator(int numberOfStates){
-		_numberGen = new Random(System.currentTimeMillis());
-		_numberOfStates = numberOfStates;
+import probabilityModel.Model;
+
+public class ICGenerator{
+	private Model _model;
+	public ICGenerator(Model probModel){
+		_model=probModel;
 	}
 	public int[] getIC1D(int latticeSize){
 		int[] newIC = new int[latticeSize];
@@ -44,7 +43,6 @@ public class ICGenerator {
 			for(int rows=0;rows<latticeSize;rows++){
 				for(int cols=0;cols<latticeSize;cols++){
 					IC[planes][rows][cols]=getValue();
-			
 				}
 			}
 		}
@@ -61,6 +59,6 @@ public class ICGenerator {
 		}
 	}
 	public int getValue(){
-		return Math.abs(_numberGen.nextInt())%_numberOfStates;
+		return _model.getDigit();
 	}
 }

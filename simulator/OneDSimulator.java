@@ -1,5 +1,11 @@
 package simulator;
+import java.io.IOException;
 import java.util.Arrays;
+
+import probabilityModel.BitModel;
+import imageManipulation.AutomataDisplayer;
+import imageManipulation.States;
+
 public class OneDSimulator {
 	private CA _automaton;
 	public OneDSimulator(CA automaton){
@@ -30,12 +36,14 @@ public class OneDSimulator {
 		}
 		currentLattice[centerIndex]=_automaton.parseRule(rule);
 	}//changeState
-	public static void main(String[] args){
-		CA automaton = new CA(110,3,3);
+	public static void main(String[] args) throws IOException{
+		CA automaton = new CA(110,9,7);
 		OneDSimulator newAutomata = new OneDSimulator(automaton);
-		ICGenerator icg = new ICGenerator(3);
+		BitModel bitModel = new BitModel(7);
+		ICGenerator icg = new ICGenerator(bitModel);
 		int[] ic = icg.getIC1D(149);
 		int[][] result = newAutomata.simulate(149, ic, 300);
+		AutomataDisplayer.toImage(result, "png", "testImage", States.SEVEN);
 		for(int time=0;time<300;time++){
 			for(int i=0;i<149;i++){
 				System.out.print(result[time][i]);

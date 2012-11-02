@@ -1,5 +1,7 @@
 package simulator;
 
+import probabilityModel.BitModel;
+
 
 public class TwoDSimulator {
 	private CA _automaton;
@@ -41,7 +43,8 @@ public class TwoDSimulator {
 		currentLattice[centerY][centerX]=_automaton.parseRule(rule);
 	}//changeState
 	public static void main(String[] args){
-		ICGenerator icg = new ICGenerator(2);
+		BitModel bitModel = new BitModel(7);
+		ICGenerator icg = new ICGenerator(bitModel);
 		int[][] ic = icg.getIC2D(5);
 		CA automaton = new CA(5,1,2);
 		TwoDSimulator newAutomata = new TwoDSimulator(automaton);
