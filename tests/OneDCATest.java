@@ -1,8 +1,8 @@
 package tests;
 
 import static org.junit.Assert.*;
-import org.junit.*;
 
+import org.junit.Test;
 import simulator.CA;
 import simulator.OneDSimulator;
 

@@ -10,7 +10,7 @@ public class BitModel implements Model{
 		_numberGen = new Random(System.currentTimeMillis());
 	}
 	@Override
-	public int getDigit() {
+	public int nextDigit() {
 		return (int)(Math.abs(_numberGen.nextLong())%_numberOfStates);
 	}
 }

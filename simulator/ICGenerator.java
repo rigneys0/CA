@@ -59,6 +59,6 @@ public class ICGenerator{
 		}
 	}
 	public int getValue(){
-		return _model.getDigit();
+		return _model.nextDigit();
 	}
 }
