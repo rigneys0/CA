@@ -13,7 +13,7 @@ public class CA {
 		_numberOfStates = numberOfStates;
 	}
 	public static CA newInstance(int radius, int numberOfStates){
-		long caKey = _keyGen.nextLong();
+		long caKey = Math.abs(_keyGen.nextLong());
 		return new CA(caKey,radius,numberOfStates);
 	}
 	public long getKey(){

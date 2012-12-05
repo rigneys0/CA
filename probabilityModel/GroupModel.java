@@ -65,7 +65,7 @@ public class GroupModel implements Model{
 	}//reset
 	
 	public static void main(String[] args){
-		GroupModel g = new GroupModel(4,5);
+		GroupModel g = new GroupModel(2,5);
 		for(int j=0;j<60;j++){
 			System.out.print(g.nextDigit());
 		}
