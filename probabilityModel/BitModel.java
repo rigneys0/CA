@@ -7,10 +7,10 @@ public class BitModel implements Model{
 	private int _numberOfStates;
 	public BitModel(int numberOfStates){
 		_numberOfStates=numberOfStates;
-		_numberGen = new Random(System.currentTimeMillis());
+		_numberGen = new Random(System.currentTimeMillis()+this.hashCode());
 	}
 	@Override
-	public int nextDigit() {
-		return (int)(Math.abs(_numberGen.nextLong())%_numberOfStates);
+	public byte nextDigit() {
+		return (byte)(Math.abs(_numberGen.nextLong())%_numberOfStates);
 	}
 }

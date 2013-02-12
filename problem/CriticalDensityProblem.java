@@ -1,13 +1,117 @@
 package problem;
 
-public class CriticalDensityProblem implements Problem<String>{
+public class CriticalDensityProblem{
 
-	private String _solutionPattern;
-	public CriticalDensityProblem(){
-		_solutionPattern = "1";
+	private static CriticalDensityProblem instance=null; 
+	private int[] _states;
+	public CriticalDensityProblem(byte numberOfStates){
+		_states = new int[numberOfStates];
 	}
-	@Override
-	public String getSolutionToAchieve() {
-		return _solutionPattern;
+	public static CriticalDensityProblem getInstance(
+			byte numberOfStates){
+		if(instance == null){
+			instance= new CriticalDensityProblem(numberOfStates); 
+		}
+		return instance;
+	}
+	public boolean solves1DProblem(byte[] iC,
+			byte[] finalRow){
+		reset();
+		for(byte b : iC){
+			_states[b]++;
+		}
+		int mostCommonState = getLargest();
+		for(byte b : finalRow){
+			if(b!=mostCommonState){
+				return false;
+			}
+		}
+		return true;
+	}
+	private void reset(){
+		for(int index=0; index<_states.length;index++){
+			_states[index]=0;
+		}
+	}
+	private byte getLargest(){
+		byte largest = 0;
+		for(byte index=1;index<_states.length;index++){
+			if(_states[index]>_states[largest]){
+				largest = index;
+			}
+		}
+		return largest;
+	}
+	public synchronized boolean solves2DProblem(byte[][] iC,
+			byte[][] finalSquare){
+		reset();
+		for(byte[] row : iC){
+			for(byte b : row){
+				_states[b]++;
+			}
+		}
+		byte mostCommonState = getLargest();
+		for(byte[] row : finalSquare){
+			for(byte b : row){
+				if(b!=mostCommonState){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	public synchronized boolean solves3DProblem(byte[][][] iC,
+			byte[][][] finalCube){
+		reset();
+		for(byte[][] square : iC){
+			for(byte[] row : square){
+				for(byte b : row){
+					_states[b]++;
+				}
+			}
+		}
+		byte mostCommonState = getLargest();
+		for(byte[][] square :finalCube){
+			for(byte[] row : square){
+				for(byte b : row){
+					if(b!=mostCommonState){
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	public synchronized boolean solves4DProblem(byte[][][][] iC,
+			byte[][][][] finalHyperCube){
+		reset();
+		for(byte[][][] cube : iC){
+			for(byte[][] square : cube){
+				for(byte[] row : square){
+					for(byte b : row){
+						_states[b]++;
+					}
+				}
+			}
+		}
+		byte mostCommonState = getLargest();
+		for(byte[][][] cube : finalHyperCube){
+			for(byte[][] square :cube){
+				for(byte[] row : square){
+					for(byte b : row){
+						if(b!=mostCommonState){
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+	public static void main(String[] args){
+		CriticalDensityProblem cdp = CriticalDensityProblem.getInstance((byte)2);
+		byte[] ic = {1,0,0,0,1,1,1,1,0,1,1,0,1,1,0,1,0,0,1,0,0,1,1,0,1};
+		byte[] finalRow = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+		System.out.println(cdp.solves1DProblem(ic, finalRow));
 	}
 }

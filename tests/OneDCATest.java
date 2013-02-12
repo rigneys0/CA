@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import simulator.CA;
-import simulator.OneDSimulator;
+import simulator.rawSimulators.OneDSimulator;
 
 
 public class OneDCATest {

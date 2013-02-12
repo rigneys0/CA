@@ -3,27 +3,26 @@ package simulator;
 import java.util.Random;
 
 public class CA {
-	private long _caKey;
-	private int _radius;
+	private long _key;
 	private static Random _keyGen = new Random(System.currentTimeMillis());
-	private int _numberOfStates;
-	public CA(long key, int radius, int numberOfStates){
-		_caKey = key;
-		_radius = radius;
-		_numberOfStates = numberOfStates;
+	private static long ctr=0;
+	public CA(long key){
+		_key = key;
 	}
-	public static CA newInstance(int radius, int numberOfStates){
-		long caKey = Math.abs(_keyGen.nextLong());
-		return new CA(caKey,radius,numberOfStates);
+	public static synchronized CA newInstance(){
+		return new CA(generateKey());
 	}
 	public long getKey(){
-		return _caKey;
+		return _key;
 	}
-	public int getRadius(){
-		return _radius;
+	public void changeKey(){
+		_key=generateKey();
 	}
-	public int parseRule(long neighbourhoodValue){
-		long xOROfNeighbourValWithKey = getKey() ^ neighbourhoodValue;
-		return (int)(xOROfNeighbourValWithKey % _numberOfStates);
+	public byte parseRule(long neighbourhoodValue,byte numberOfStates){
+		long xOROfNeighbourValWithKey = (getKey() ^ neighbourhoodValue);
+		return (byte)(neighbourhoodValue % numberOfStates);
+	}
+	private static long generateKey(){
+		return Math.abs(_keyGen.nextLong()+ctr++);
 	}
 }

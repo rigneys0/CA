@@ -13,7 +13,7 @@ public class AutomataDisplayer {
 	private AutomataDisplayer(){
 		
 	}
-	public static void toImage(int[][] lattice, String imageFormat, String outputFile, States num) throws IOException{
+	public static void toImage(byte[][] lattice, String imageFormat, String outputFile, States num) throws IOException{
 		int width=lattice[0].length;
 		int height = lattice.length;
 		BufferedImage output = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
