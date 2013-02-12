@@ -7,8 +7,7 @@ import simulator.IC;
 
 public interface SimulatorAdapter {	
 	public HashMap<Integer,byte[][]> getFinalOutput();
-	public boolean run(int turns, int latticeSize, CA automata, 
-			byte radius, byte states,IC ic);
+	public boolean run(CA automata,byte radius, byte states,IC ic);
 	public int getDimensions();
-	public void setUp(int turns, int latticeSize);
+	public void setUp(byte turns, int latticeSize);
 }

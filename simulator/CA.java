@@ -9,7 +9,7 @@ public class CA {
 	public CA(long key){
 		_key = key;
 	}
-	public static synchronized CA newInstance(){
+	public static CA newInstance(){
 		return new CA(generateKey());
 	}
 	public long getKey(){

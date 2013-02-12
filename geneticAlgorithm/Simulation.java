@@ -7,30 +7,33 @@ import simulator.adapters.SimulatorAdapter;
 
 public class Simulation implements Runnable{
 	private SimulatorAdapter _sim;
-	private int _turns;
+	private byte _turns;
 	private int _latticeSize;
 	private CA _automata;
 	private byte _states;
 	private byte _radius;
 	private HashMap<Integer,byte[][]> _finalImageBlock;
 	private int _numberSolved;
-	private IC _configuration;
+	private IC[] _configurations;
+	private int _id;
 	public Simulation(){
 		_numberSolved=0;
-		_finalImageBlock = new HashMap<Integer,byte[][]>();
+		_id=0;
+		//_finalImageBlock = new HashMap<Integer,byte[][]>();
 	}
-	public void setUp(SimulatorAdapter sim, int turns,
+	public void setUp(SimulatorAdapter sim, byte turns,
 			int latticeSize, CA automata, byte radius, byte states, 
-			IC configuration){
+			IC configurations[],int id){
 		_sim = sim;
 		_turns = turns;
 		_automata = automata;
 		_latticeSize = latticeSize;
 		_states = states;
 		_radius = radius;
-		_finalImageBlock.clear();
-		_configuration = configuration;
+		//_finalImageBlock.clear();
+		_configurations = configurations;
 		_sim.setUp(turns, latticeSize);
+		_id = id;
 	}
 	public int getNumberSolved(){
 		return _numberSolved;
@@ -40,11 +43,18 @@ public class Simulation implements Runnable{
 	}
 	@Override
 	public void run(){
+		System.out.print(_id + " ");
+		for(int index=0; index<_configurations.length;index++){
 			boolean solved = 
-					_sim.run(_turns, _latticeSize, _automata,_radius, _states,
-					_configuration);
+					_sim.run(_automata,_radius, _states,
+					_configurations[index]);
+			//System.out.println(index);
 			if(solved){
+				System.out.println("Solved: "+_id + " " + index);
 				_numberSolved++;
 			}
+		}
+		System.out.println("FF"+_id);
+			
 	}
 }
