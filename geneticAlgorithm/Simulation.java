@@ -1,5 +1,9 @@
 package geneticAlgorithm;
 
+import imageManipulation.AutomataDisplayer;
+import imageManipulation.States;
+
+import java.io.IOException;
 import java.util.HashMap;
 import simulator.CA;
 import simulator.IC;
@@ -11,11 +15,9 @@ public class Simulation implements Runnable{
 	private byte _states;
 	private byte _radius;
 	private HashMap<Integer,byte[][]> _finalImageBlock;
-	private int _numberSolved;
 	private IC[] _configurations;
 	private int _id =0;
 	public Simulation(){
-		_numberSolved=0;
 	}
 	public void setUp(SimulatorAdapter sim, byte turns,
 			int latticeSize, CA automata, byte radius, byte states, 
@@ -37,6 +39,13 @@ public class Simulation implements Runnable{
 			boolean solved =_sim.run(_automata,_radius, _states,_configurations[index]);
 			if(solved){
 				_automata.solvesProblem();
+				try {
+					AutomataDisplayer.toImage(_sim.getFinalOutput().get(0),
+							"png", "testImage"+_id+"_"+index, States.FOUR);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}

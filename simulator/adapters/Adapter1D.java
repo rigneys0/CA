@@ -57,7 +57,7 @@ public class Adapter1D implements SimulatorAdapter{
 		return 1;
 	}
 	public static void main(String[] args) throws IOException{
-		CA aut = CA.newInstance();
+		CA aut = new CA(0);
 		SimulatorAdapter ad1 = new Adapter1D();
 		System.out.println(ad1.getClass().getCanonicalName());
 		System.out.println(SimulatorAdapter.class.getCanonicalName());
