@@ -37,7 +37,7 @@ public class Adapter4D implements SimulatorAdapter{
 	public boolean run(CA automata, byte radius,byte states,IC ic) {
 		reset();
 		_storage[0] = Arrays.copyOf(ic.getFourDimensionIC(), _latticeSize);
-		_pcd = CriticalDensityProblem.getInstance(states);
+		_pcd = new CriticalDensityProblem(states);
 		_finalImageBlock.clear();
 		_storage = _sim4D.simulate(_storage[0],automata);
 		createFinalImageBlock(_storage[_turns]);

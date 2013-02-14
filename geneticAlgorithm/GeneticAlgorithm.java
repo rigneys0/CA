@@ -22,12 +22,14 @@ public class GeneticAlgorithm {
 		SimulatorAdapterFactory saf = SimulatorAdapterFactory.getInstance();
 		Simulation[] sims = new Simulation[100];
 		IC[] ics = new IC[10000];
-		Model probModel = new GroupModel(2, 6);
+		Model probModel = new GroupModel(2, 3);
 		ICGenerator icGen = new ICGenerator(probModel);
 		CA[] automata = new CA[100];
 		for(int index=0; index<10000;index++){
 			ics[index] = new IC();
-			ics[index].set1D(icGen.getIC1D(149));
+			byte[] ic = icGen.getIC1D(149);
+			ics[index].set1D(ic);
+			
 		}
 		for(int index=0;index<100;index++){
 			sims[index] = new Simulation();
@@ -35,22 +37,19 @@ public class GeneticAlgorithm {
 			sims[index].setUp(saf.getSimulator(1), (byte)100, 149, automata[index], radius, states, ics,index);
 		}
 		
-		System.out.println("QQ");
+		//System.out.println("QQ");
 		for(int index=0; index<100; index++)
 		{
 			threadPool.submit(sims[index]);
 		}
 		System.out.println("y");
 		threadPool.shutdown();
-		threadPool.awaitTermination(1000, TimeUnit.MINUTES);
+		threadPool.awaitTermination(10000, TimeUnit.MINUTES);
 		System.out.println("x");
-		int indexTotal = 0;
-		for(int index=0; index<1; index++)
+		for(int index=0; index<100; index++)
 		{
-			indexTotal+=sims[index].getNumberSolved();
-
+			System.out.println("Thread " + index + " solved  "+ automata[index].problemsSolved());
 		}
-		System.out.println(indexTotal);
 	}
 	public static void main(String[] args) throws Exception{
 		GeneticAlgorithm ga = new GeneticAlgorithm();

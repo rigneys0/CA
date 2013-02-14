@@ -7,14 +7,7 @@ public class CriticalDensityProblem{
 	public CriticalDensityProblem(byte numberOfStates){
 		_states = new int[numberOfStates];
 	}
-	public static CriticalDensityProblem getInstance(
-			byte numberOfStates){
-		if(instance == null){
-			instance= new CriticalDensityProblem(numberOfStates); 
-		}
-		return instance;
-	}
-	public boolean solves1DProblem(byte[] iC,
+	public synchronized boolean solves1DProblem(byte[] iC,
 			byte[] finalRow){
 		reset();
 		for(byte b : iC){
@@ -109,9 +102,6 @@ public class CriticalDensityProblem{
 		return true;
 	}
 	public static void main(String[] args){
-		CriticalDensityProblem cdp = CriticalDensityProblem.getInstance((byte)2);
-		byte[] ic = {1,0,0,0,1,1,1,1,0,1,1,0,1,1,0,1,0,0,1,0,0,1,1,0,1};
-		byte[] finalRow = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-		System.out.println(cdp.solves1DProblem(ic, finalRow));
+		
 	}
 }

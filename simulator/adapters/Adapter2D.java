@@ -36,7 +36,7 @@ public class Adapter2D implements SimulatorAdapter {
 	public boolean run(CA automaton,byte radius,byte states, IC ic) {
 		reset();
 		_storage[0] = Arrays.copyOf(ic.getTwoDimensionIC(), _latticeSize);
-		_pcd = CriticalDensityProblem.getInstance(states);
+		_pcd = new CriticalDensityProblem(states);
 		_storage = _sim2D.simulate(ic.getTwoDimensionIC(),automaton);
 		createFinalImageBlock(_storage[_turns]);
 		return solvesProblem(_storage[0],_storage[_turns]);

@@ -27,6 +27,8 @@ public class Adapter1D implements SimulatorAdapter{
 	}
 	public void setUp(byte turns, int latticeSize){
 		storage = new byte[turns+1][latticeSize];
+		_latticeSize = latticeSize;
+		_turns = turns;
 	}
 	public HashMap<Integer,byte[][]> getFinalOutput() {
 		return _finalImageBlock;
@@ -34,14 +36,15 @@ public class Adapter1D implements SimulatorAdapter{
 	@Override
 	public boolean run(CA automaton,byte radius, byte states, IC ic) {
 		storage[0] = Arrays.copyOf(ic.getOneDimensionIC(), _latticeSize);
-		_pcd = CriticalDensityProblem.getInstance(states);
+		_pcd = new CriticalDensityProblem(states);
 		_sim1D.setParameters(_latticeSize, _turns, radius, states);
 		storage = _sim1D.simulate(storage,automaton);
-		//createFinalImageBlock(output);
+		createFinalImageBlock(storage);
 		return solvesProblem(storage[0],storage[_turns]);
 	}
 	private void createFinalImageBlock(byte[][] output){
-		_finalImageBlock.put(_imageBlockCounter, output);
+		_finalImageBlock.remove(0);
+		_finalImageBlock.put(0, output);
 		_imageBlockCounter++;
 			
 	}
