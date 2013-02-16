@@ -36,12 +36,15 @@ public class CA implements Comparable<CA>{
 	public int problemsSolved(){
 		return _numberSolved;
 	}
+<<<<<<< HEAD
 	public int compareTo(CA other){
 		return _numberSolved - other._numberSolved;
 	}
 	public boolean equals(Object other){
 		return compareTo((CA)other)==0;
 	}
+=======
+>>>>>>> f5c9d8f7531bbeb13089efe8f38d4ce39143110c
 	private long generateKey(){
 		return _keyGen.nextLong();
 	}

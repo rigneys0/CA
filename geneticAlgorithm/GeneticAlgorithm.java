@@ -23,7 +23,11 @@ public class GeneticAlgorithm {
 				SimulatorAdapterFactory.getInstance();
 		Simulation[] sims = new Simulation[100];
 		IC[] ics = new IC[10000];
+<<<<<<< HEAD
 		Model probModel = new GroupModel(2, 1);
+=======
+		Model probModel = new GroupModel(4, 2);
+>>>>>>> f5c9d8f7531bbeb13089efe8f38d4ce39143110c
 		ICGenerator icGen = new ICGenerator(probModel);
 		CA[] automata = new CA[100];
 		for(int index=0; index<10000;index++){
