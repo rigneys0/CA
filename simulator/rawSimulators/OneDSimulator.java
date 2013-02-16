@@ -46,14 +46,14 @@ public class OneDSimulator {
 	public static void main(String[] args) throws IOException{
 		CA automaton = new CA(9111111111l);
 		OneDSimulator newAutomata = new OneDSimulator();
-		GroupModel gModel = new GroupModel(2,6);
+		GroupModel gModel = new GroupModel(4,6);
 		ICGenerator icg = new ICGenerator(gModel);
 		byte[][] storage = new byte[101][149];
 		storage[0]= icg.getIC1D(149);
 		
 		newAutomata.setParameters(149,100,(byte)6,(byte)2);
 		byte[][] result = newAutomata.simulate(storage,automaton);
-		AutomataDisplayer.toImage(result, "png", "testImage", States.TWO);
+		AutomataDisplayer.toImage(result, "png", "testImage", States.FOUR);
 		for(int time=0;time<101;time++){
 			for(int i=0;i<storage[0].length;i++){
 				System.out.print(result[time][i]);

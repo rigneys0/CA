@@ -65,7 +65,7 @@ public class ThreeDSimulator {
 		currentLattice[centerZ][centerY][centerX]=automaton.parseRule(rule,_states);
 	}
 	public static void main(String[] args){
-		CA someCA = CA.newInstance();
+		CA someCA = new CA(0);
 		int latticeSize=4;
 		ThreeDSimulator ThreeDS = new ThreeDSimulator();
 		BitModel bitModel = new BitModel(7);
