@@ -6,14 +6,12 @@ public class FourDSimulator {
 	private int _latticeSize;
 	private int _turns;
 	private byte _radius;
-	private byte _states;
 	public FourDSimulator(){
 	}
-	public void setParameters(int latticeSize,int turns,byte radius,byte states){
+	public void setParameters(int latticeSize,int turns,byte radius){
 		_latticeSize = latticeSize;
 		_turns = turns;
 		_radius = radius;
-		_states = states;
 	}
 	public byte[][][][][] simulate(byte[][][][] ic,CA automaton){
 		byte[][][][][] output = 
@@ -68,6 +66,6 @@ public class FourDSimulator {
 			}
 		}
 		currentLattice[centerT][centerZ][centerY][centerX]=
-				automaton.parseRule(rule,_states);
+				automaton.parseRule(rule);
 	}
 }

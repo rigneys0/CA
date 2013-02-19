@@ -49,7 +49,6 @@ public class Adapter4D implements SimulatorAdapter{
 	private void reset(){
 		_imageBlockCounter = 0;
 		_finalImageBlock.clear();
-		_imageBlockCounter=0;
 	}
 	private void createFinalImageBlock(byte[][][][] finalHypercube){
 		for(byte[][][] threeDBlock : finalHypercube){

@@ -8,14 +8,12 @@ public class ThreeDSimulator {
 	private int _latticeSize;
 	private int _turns;
 	private byte _radius;
-	private byte _states;
 	public ThreeDSimulator(){
 	}
-	public void setParameters(int latticeSize,int turns,byte radius,byte states){
+	public void setParameters(int latticeSize,int turns,byte radius){
 		_latticeSize = latticeSize;
 		_turns = turns;
 		_radius = radius;
-		_states = states;
 	}
 	public byte[][][][] simulate(byte[][][] ic,CA automaton){
 		byte[][][][] output = 
@@ -62,10 +60,10 @@ public class ThreeDSimulator {
 				}
 			}
 		}
-		currentLattice[centerZ][centerY][centerX]=automaton.parseRule(rule,_states);
+		currentLattice[centerZ][centerY][centerX]=automaton.parseRule(rule);
 	}
 	public static void main(String[] args){
-		CA someCA = new CA(0);
+		CA someCA = new CA((byte)2);
 		int latticeSize=4;
 		ThreeDSimulator ThreeDS = new ThreeDSimulator();
 		BitModel bitModel = new BitModel(7);

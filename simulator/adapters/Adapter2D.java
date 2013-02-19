@@ -27,6 +27,8 @@ public class Adapter2D implements SimulatorAdapter {
 	}
 	public void setUp(byte turns, int latticeSize){
 		_storage = new byte[turns+1][latticeSize][latticeSize];
+		_turns = turns;
+		_latticeSize = latticeSize;
 	}
 	@Override
 	public HashMap<Integer,byte[][]> getFinalOutput() {
@@ -34,11 +36,12 @@ public class Adapter2D implements SimulatorAdapter {
 	}
 	@Override
 	public boolean run(CA automaton,byte radius,byte states, IC ic) {
+		_sim2D.setParameters(_latticeSize, _turns, radius);
 		reset();
 		_storage[0] = Arrays.copyOf(ic.getTwoDimensionIC(), _latticeSize);
 		_pcd = new CriticalDensityProblem(states);
-		_storage = _sim2D.simulate(ic.getTwoDimensionIC(),automaton);
-		createFinalImageBlock(_storage[_turns]);
+		_storage = _sim2D.simulate(_storage[0],automaton);
+		//createFinalImageBlock(_storage[_turns]);
 		return solvesProblem(_storage[0],_storage[_turns]);
 	}
 	private boolean solvesProblem(byte[][] ic, byte[][] finalRow) {
@@ -47,7 +50,6 @@ public class Adapter2D implements SimulatorAdapter {
 	private void reset(){
 		_imageBlockCounter = 0;
 		_finalImageBlock.clear();
-		_imageBlockCounter=0;
 	}
 	private void createFinalImageBlock(byte[][] output){
 		_finalImageBlock.put(_imageBlockCounter, output);

@@ -31,6 +31,8 @@ public class Adapter3D implements SimulatorAdapter{
 	}
 	public void setUp(byte turns, int latticeSize){
 		_storage = new byte[turns+1][latticeSize][latticeSize][latticeSize];
+		_turns = turns;
+		_latticeSize = latticeSize;
 	}
 	@Override
 	public boolean run(CA automaton,byte radius, byte states,IC ic) {
@@ -47,7 +49,6 @@ public class Adapter3D implements SimulatorAdapter{
 	private void reset(){
 		_imageBlockCounter = 0;
 		_finalImageBlock.clear();
-		_imageBlockCounter=0;
 	}
 	private void createFinalImageBlock(byte[][][] output){
 			for(byte[][] twoDBlock : output){

@@ -3,29 +3,25 @@ package simulator;
 import java.util.Random;
 
 public class CA implements Comparable<CA>{
-	private long _key;
 	private static Random _keyGen = new Random(System.currentTimeMillis());
 	private int _numberSolved;
-	private byte[] _table;
-	public CA(long key){
-		//_key = key;
+	private byte _states;
+	private byte[] _key;
+	public CA(byte states){
 		_numberSolved = 0;
-		_table = new byte[64];
-		for(int index=0; index<64;index++){
-			
-			_table[index] = (byte) Math.abs(generateKey() % 4);
-			//System.out.println(_table[index]);
-		}
+		_states = states;
+		_key = new byte[64];
+		generateKey();
 	}
-	public long getKey(){
+	public byte[] getKey(){
 		return _key;
 	}
 	public void changeKey(){
-		_key=0;
+		generateKey();
 	}
-	public byte parseRule(long neighbourhoodValue,byte numberOfStates){
+	public byte parseRule(long neighbourhoodValue){
 		//long xOROfNeighbourValWithKey = (getKey() ^ neighbourhoodValue);
-		return (byte) (_table[(int) (neighbourhoodValue % 64)]%numberOfStates);
+		return _key[(int) (Math.abs(neighbourhoodValue) % 64)];
 	}
 	public void solvesProblem(){
 		_numberSolved++;
@@ -36,16 +32,17 @@ public class CA implements Comparable<CA>{
 	public int problemsSolved(){
 		return _numberSolved;
 	}
-<<<<<<< HEAD
+	@Override
 	public int compareTo(CA other){
 		return _numberSolved - other._numberSolved;
 	}
+	@Override
 	public boolean equals(Object other){
 		return compareTo((CA)other)==0;
 	}
-=======
->>>>>>> f5c9d8f7531bbeb13089efe8f38d4ce39143110c
-	private long generateKey(){
-		return _keyGen.nextLong();
+	private void generateKey(){
+		for(int index=0; index<64;index++){
+			_key[index] = (byte) Math.abs(_keyGen.nextLong() % _states);
+		}
 	}
 }

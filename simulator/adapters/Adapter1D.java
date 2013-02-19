@@ -20,7 +20,6 @@ public class Adapter1D implements SimulatorAdapter{
 	private HashMap<Integer,byte[][]> _finalImageBlock;
 	private byte _turns;
 	private int _latticeSize; 
-	private int _imageBlockCounter;
 	public Adapter1D(){
 		_sim1D = new OneDSimulator();
 		_finalImageBlock=new HashMap<Integer,byte[][]>();
@@ -37,7 +36,7 @@ public class Adapter1D implements SimulatorAdapter{
 	public boolean run(CA automaton,byte radius, byte states, IC ic) {
 		storage[0] = Arrays.copyOf(ic.getOneDimensionIC(), _latticeSize);
 		_pcd = new CriticalDensityProblem(states);
-		_sim1D.setParameters(_latticeSize, _turns, radius, states);
+		_sim1D.setParameters(_latticeSize, _turns, radius);
 		storage = _sim1D.simulate(storage,automaton);
 		createFinalImageBlock(storage);
 		return solvesProblem(storage[0],storage[_turns]);
@@ -45,7 +44,6 @@ public class Adapter1D implements SimulatorAdapter{
 	private void createFinalImageBlock(byte[][] output){
 		_finalImageBlock.remove(0);
 		_finalImageBlock.put(0, output);
-		_imageBlockCounter++;
 			
 	}
 	private boolean solvesProblem(byte[] ic, byte[] finalRow) {
@@ -57,7 +55,7 @@ public class Adapter1D implements SimulatorAdapter{
 		return 1;
 	}
 	public static void main(String[] args) throws IOException{
-		CA aut = new CA(0);
+		/*CA aut = new CA((byte)2);
 		SimulatorAdapter ad1 = new Adapter1D();
 		System.out.println(ad1.getClass().getCanonicalName());
 		System.out.println(SimulatorAdapter.class.getCanonicalName());
@@ -72,6 +70,6 @@ public class Adapter1D implements SimulatorAdapter{
 				System.out.print(output.get(0)[i][j]);
 			}
 			System.out.println();
-		}
+		}*/
 	}
 }

@@ -1,19 +1,19 @@
 package simulator.rawSimulators;
 
+import probabilityModel.BitModel;
 import simulator.CA;
+import simulator.ICGenerator;
 
 public class TwoDSimulator {
 	private int _latticeSize;
 	private int _turns;
 	private byte _radius;
-	private byte _states;
 	public TwoDSimulator(){
 	}
-	public void setParameters(int latticeSize,int turns,byte radius,byte states){
+	public void setParameters(int latticeSize,int turns,byte radius){
 		_latticeSize = latticeSize;
 		_turns = turns;
 		_radius = radius;
-		_states = states;
 	}
 	public byte[][][] simulate(byte[][] IC,CA automaton){
 		byte[][][] output = new byte[_turns+1][_latticeSize][_latticeSize];
@@ -48,16 +48,16 @@ public class TwoDSimulator {
 						<<((neighbourhoodSize-row)-1)*neighbourhoodSize +col);
 			}
 		}
-		currentLattice[centerY][centerX]=automaton.parseRule(rule,_states);
+		currentLattice[centerY][centerX]=automaton.parseRule(rule);
 	}//changeState
-	/*public static void main(String[] args){
-		SimulatorFactory simFac = SimulatorFactory.getInstance();
-		TwoDSimulator twoDS = (TwoDSimulator)(simFac.getSimulator(2));
+	public static void main(String[] args){
+		TwoDSimulator twoDS = new TwoDSimulator();
 		BitModel bitModel = new BitModel(7);
 		ICGenerator icg = new ICGenerator(bitModel);
-		byte[][] ic = icg.getIC2D(5);
-		CA automaton = new CA(5,1,2);
-		/*byte[][][] result =twoDS.simulate(5, ic, 5,automaton);
+		byte[][] ic = icg.getIC2D(79);
+		CA automaton = new CA((byte)2);
+		twoDS.setParameters(11, 2, (byte)3);
+		byte[][][] result =twoDS.simulate(ic, automaton);
 		for(int i=0;i<5;i++){
 			for(int j=0;j<5;j++){
 				for(int k=0;k<5;k++){
@@ -68,5 +68,5 @@ public class TwoDSimulator {
 			System.out.println();
 			System.out.println();
 		}
-	}*/
+	}
 }

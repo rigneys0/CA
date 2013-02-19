@@ -7,18 +7,22 @@ import java.util.Random;
  */
 public class GroupModel implements Model{
 	private Random _stateGenerator;
-	private int _numberOfStates;
-	private int _groupSize;
+	private byte _numberOfStates;
+	private byte _groupSize;
 	private long[] _factorialTable;
 	private byte _lastGenerated;
 	private int _numberGenerated;
-	public GroupModel(int numberOfStates, int groupSize){
-		_numberOfStates=numberOfStates;
+	private byte[] _probabilities;
+	public GroupModel(byte numberOfStates, byte groupSize,
+			byte[] probabilities){
+		_numberOfStates=numberOfStates;		
+		_probabilities = probabilities;
 		_stateGenerator = new Random(System.currentTimeMillis());
 		_groupSize = groupSize;
 		_lastGenerated = getRandomState();
 		_numberGenerated=1;
 		_factorialTable=buildTable(groupSize);
+
 	}//constructor
 	private long[] buildTable(int size){
 		long[] factorialTable = new long[size];
@@ -30,7 +34,8 @@ public class GroupModel implements Model{
 	}//buildTable
 	
 	private byte getRandomState(){
-		return (byte)Math.abs(_stateGenerator.nextInt()%_numberOfStates);
+		return _probabilities[
+		            Math.abs(_stateGenerator.nextInt())%_probabilities.length];
 	}//getRandomState
 	
 	private long nChooseR(int r){
@@ -62,7 +67,7 @@ public class GroupModel implements Model{
 		_lastGenerated=getRandomState();
 	}//reset
 	public static void main(String[] args){
-		GroupModel g = new GroupModel(2,1);
+		GroupModel g = new GroupModel((byte)2,(byte)1, new byte[]{1,0,0});
 		for(int j=0;j<60;j++){
 			System.out.print(g.nextDigit());
 		}

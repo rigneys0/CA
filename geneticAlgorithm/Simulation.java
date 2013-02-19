@@ -39,22 +39,16 @@ public class Simulation implements Runnable{
 			boolean solved =_sim.run(_automata,_radius, _states,_configurations[index]);
 			if(solved){
 				_automata.solvesProblem();
-<<<<<<< HEAD
 				/*try {
-=======
-				try {
->>>>>>> f5c9d8f7531bbeb13089efe8f38d4ce39143110c
 					AutomataDisplayer.toImage(_sim.getFinalOutput().get(0),
 							"png", "testImage"+_id+"_"+index, States.FOUR);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-<<<<<<< HEAD
 				}*/
-=======
-				}
->>>>>>> f5c9d8f7531bbeb13089efe8f38d4ce39143110c
 			}
+			//System.out.println(index);
 		}
+		System.out.println(_id);
 	}
 }
