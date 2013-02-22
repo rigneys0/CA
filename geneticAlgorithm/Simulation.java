@@ -1,9 +1,5 @@
 package geneticAlgorithm;
 
-import imageManipulation.AutomataDisplayer;
-import imageManipulation.States;
-
-import java.io.IOException;
 import java.util.HashMap;
 import simulator.CA;
 import simulator.IC;
