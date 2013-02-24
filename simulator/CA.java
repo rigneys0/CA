@@ -42,7 +42,15 @@ public class CA implements Comparable<CA>{
 	}
 	private void generateKey(){
 		for(int index=0; index<64;index++){
-			_key[index] = (byte) Math.abs(_keyGen.nextLong() % _states);
+			_key[index] = (byte) Math.abs(_keyGen.nextInt() % _states);
 		}
+	}
+	@Override
+	public String toString(){
+		String returnValue = "";
+		for(byte b : _key){
+			returnValue+=b;
+		}
+		return returnValue;
 	}
 }

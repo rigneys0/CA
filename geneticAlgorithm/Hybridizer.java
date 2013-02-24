@@ -1,59 +1,81 @@
 package geneticAlgorithm;
-
+import java.util.Arrays;
 import java.util.Random;
-import java.util.TreeSet;
 
 import simulator.CA;
 
 public class Hybridizer {
 	private int _keepZone;
-	private Random _randGen;
-	private TreeSet<CA> _sortedPopulation;
+	private Random _randReproducers;
+	private Random _randMutatorMask;
+	private Random _randMutatorBase;
 	public Hybridizer(byte keepZone){
 		_keepZone = keepZone;
-		_randGen = new Random(System.currentTimeMillis());
+		_randReproducers = new Random(System.currentTimeMillis()+101);
+		_randMutatorBase = new Random(System.currentTimeMillis()+141);
+		_randMutatorMask = new Random(System.currentTimeMillis()+71);
 	}
-	
-	public CA[] hybridize(CA[] population){
-		for(CA ca : population){
-			_sortedPopulation.add(ca);
+	public CA[] hybridize(CA[] population, byte childLimit){
+		Arrays.sort(population);
+		int populationSize = removeWorst(population);
+		int targetPopulation = population.length;
+		int initialDefecit = targetPopulation - populationSize;
+		int defecit = initialDefecit-1;
+		while(defecit>=0){
+			CA father = population[Math.abs((_randReproducers.nextInt())
+			                          %populationSize)+initialDefecit];
+			CA mother = population[Math.abs((_randReproducers.nextInt())
+                    				  %populationSize)+initialDefecit];
+			//System.out.println("YY"+mother);
+			defecit = crossBreed(population, mother, father,childLimit,
+					targetPopulation,defecit);
 		}
-		TreeSet<CA> newPopulation = rank(_sortedPopulation);
-		newPopulation.
-		crossBreed(newPopulation,new CA((byte)2), new CA((byte)2),2);
-		return (CA[])newPopulation.toArray();
+		return population;
 	}
-	public TreeSet<CA> rank(TreeSet<CA> CAs){
-		TreeSet<CA> nonZeroList = getNonZero(CAs);
-		return getTopValues(nonZeroList);
+	public int removeWorst(CA[] CAs){
+		int numberLeft = CAs.length - getNonZero(CAs);
+		return getTopValues(CAs,numberLeft);
 	}
-	private TreeSet<CA> getTopValues(TreeSet<CA> CAs){
-		if(CAs.size()<= _keepZone){
-			return CAs;
+	private int getTopValues(CA[] CAs, int numberLeft){
+		if(numberLeft <= _keepZone){
+			return numberLeft;
 		}
-		System.out.println("QQ"+(CAs.size() - _keepZone));
-		int numberToRemove = CAs.size()-_keepZone;
-		for(int index=0; index<numberToRemove;index++){
-			System.out.println(CAs.remove(CAs.first()));
-			//someCA = CAs.iterator().next();
+		int numberToRemove = numberLeft-_keepZone;
+		int start = CAs.length - numberLeft;
+		System.out.println("QQ"+numberLeft);
+		for(int index = start; index< start +numberToRemove;index++){
+			System.out.println("PP"+index);
+			CAs[index]=null;
+			numberLeft--;
 		}
-		return CAs;
+		System.out.println("QQ"+numberLeft);
+		return numberLeft;
 	}
-	private TreeSet<CA> getNonZero(TreeSet<CA> CAs){
-		CA template = new CA((byte)2);
-		template.solvesProblem();
-		CAs.remove(template);
-		return CAs;
+	private int getNonZero(CA[] CAs){
+		int index=0;
+		int removedCtr = 0;
+		for(; index<CAs.length;index++){
+			if(CAs[index].problemsSolved()==0){
+				CAs[index]=null;
+				removedCtr++;
+			}
+		}
+		return removedCtr;
 	}
-	private void crossBreed(TreeSet<CA> CAs,CA mother, CA father, int offSpring){
+	private int crossBreed(CA[] CAs,CA mother, CA father, 
+			int offSpring, int targetPopulation, int defecit){
 		byte[] motherKey = mother.getKey();
 		byte[] fatherKey = father.getKey();
-		for(int index=0; index<offSpring; index++){
+		for(int index=0; index<offSpring && defecit >= 0;index++){
 			CA child = new CA((byte)2);
 			cross(child.getKey(), motherKey, fatherKey);
 			mutate(child.getKey());
-			CAs.add(child);
+			//System.out.println("CC"+child.toString());
+			CAs[defecit]=child;
+			System.out.println(defecit);
+			defecit--;
 		}
+		return defecit;
 	}
 	private void cross(byte[] childKey, byte[] motherKey, 
 			byte[] fatherKey){
@@ -62,16 +84,19 @@ public class Hybridizer {
 		}
 	}
 	private void mutate(byte[] childKey){
-		byte position = (byte)(_randGen.nextInt() % 8);
-		byte base = 1;
+		byte position = (byte)(_randMutatorMask.nextInt() % 8);
+		byte base = (byte)(_randMutatorBase.nextInt()%2);
 		byte mask = (byte)(base << position);
 		for(byte index=0; index<position; index++){
 			childKey[index] = (byte)(childKey[index] ^ mask);
+			base = (byte)(_randMutatorBase.nextInt()%2);
+			mask = (byte)(base << position);
+			position = (byte)(_randMutatorMask.nextInt() % 8);
 		}
 	}
 	public static void main(String[] args){
-		Hybridizer h = new Hybridizer((byte)2);
-		TreeSet<CA> someCAs = new TreeSet<CA>();
+		Hybridizer h = new Hybridizer((byte)4);
+		CA[] someCAs = new CA[9];
 		CA ca1 = new CA((byte)2);
 		CA ca2 = new CA((byte)2);
 		CA ca3 = new CA((byte)2);
@@ -95,17 +120,20 @@ public class Hybridizer {
 		ca7.solvesProblem();
 		CA ca8 = new CA((byte)2);
 		ca8.solvesProblem();
-		someCAs.add(ca1);
-		someCAs.add(ca2);
-		someCAs.add(ca3);
-		someCAs.add(ca4);
-		someCAs.add(ca5);
-		someCAs.add(ca6);
-		someCAs.add(ca7);
-		someCAs.add(ca8);
-		TreeSet<CA> top= h.rank(someCAs);
-		for(CA c : top){
-			System.out.println(c.problemsSolved());
+		someCAs[0]=ca1;
+		someCAs[1]=ca2;
+		someCAs[2]=ca3;
+		someCAs[3]=ca4;
+		someCAs[4]=ca5;
+		someCAs[5]=ca6;
+		someCAs[6]=ca7;
+		someCAs[7]=ca8;
+		someCAs[8]=new CA((byte)2);
+		CA[] nextGen= h.hybridize(someCAs,(byte)2);
+		for(CA c : nextGen){
+			if(c!=null){
+				System.out.println(c);
+			}
 		}
 	}
 	

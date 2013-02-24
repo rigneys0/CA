@@ -17,21 +17,22 @@ public class GeneticAlgorithm {
 	public GeneticAlgorithm(){
 		threadPool = Executors.newFixedThreadPool(100);
 	}
-	public void run(int generations){
+	public void run(int generations, ParameterSet ps, Hybridizer geneticBit) throws Exception{
+		IC[] ics = new IC[ps.getParameterSpaceSize()];
+		Simulation[] sims = new Simulation[ps.getPopulationSize()];
+		CA[] population = new CA[ps.getPopulationSize()];
 		for(int index =0; index < generations; index++){
-			
+			setUpParameterSpace(ics, ps);
+			setUpPopulation(sims, population, ics, ps);
+			iterateGeneration(ics, sims, population, ps);
+			geneticBit.hybridize(population, (byte)2);
+			threadPool = Executors.newFixedThreadPool(100);
 		}
 	}
-	public void InterateGeneration(byte radius, byte states, int latticeSize,
-			byte dimensions, int populationSize, int parameterSpaceSize, int automataGenerations) throws Exception {
+	private void iterateGeneration(IC[] ics, Simulation[] sims,CA[] population,ParameterSet ps) throws Exception {
 		
-		Simulation[] sims = new Simulation[populationSize];
-		IC[] ics = new IC[parameterSpaceSize];
-		CA[] automata = new CA[populationSize];
-		setUpParameterSpace(ics, latticeSize, dimensions, parameterSpaceSize, states);
-		setUpPopulation(sims, automata, ics, dimensions, automataGenerations, latticeSize, radius, populationSize, states);
 		//System.out.println("QQ");
-		for(int index=0; index<populationSize; index++)
+		for(int index=0; index<ps.getPopulationSize(); index++)
 		{
 			threadPool.submit(sims[index]);
 		}
@@ -39,41 +40,51 @@ public class GeneticAlgorithm {
 		threadPool.shutdown();
 		threadPool.awaitTermination(1000, TimeUnit.MINUTES);
 		System.out.println("x");
-		for(int index=0; index<populationSize; index++)
+		for(int index=0; index<ps.getPopulationSize(); index++)
 		{
 			System.out.println("Thread " + index + " solved  "+
-					automata[index].problemsSolved());
+					population[index].problemsSolved());
 		}
 	}
-	private void setUpPopulation(Simulation[] sims, CA[] automata,IC[] ics, byte dimensions, int automataGenerations,int latticeSize, byte radius, int populationSize, byte states){
+	private void setUpPopulation(Simulation[] sims, CA[] population,IC[] ics, ParameterSet ps){
 		SimulatorAdapterFactory saf = SimulatorAdapterFactory.getInstance();
-		for(int index=0;index<populationSize;index++){
+		for(int index=0;index<ps.getPopulationSize();index++){
 			sims[index] = new Simulation();
-			automata[index]=new CA(states);
-			sims[index].setUp(saf.getSimulator(dimensions), (byte)automataGenerations, latticeSize,
-					automata[index], radius, states, ics,index);
-			
+			population[index]=new CA(ps.getStates());
+			sims[index].setUp(saf.getSimulator(ps.getDimensions()), 
+					ps.getTurns(), ps.getLatticeSize(),population[index], 
+					ps.getRadius(), ps.getStates(), ics,index);
 		}
 	}
-	private void setUpParameterSpace(IC[] ics, int latticeSize, byte dimensions, int parameterSpaceSize, byte states) throws Exception{
+	private void setUpParameterSpace(IC[] ics, ParameterSet ps) throws Exception{
 		String arrayName = "";
-		for(int index = 0; index<dimensions; index++){
+		for(int index = 0; index<ps.getDimensions(); index++){
 			arrayName+="[";
 		}
 		arrayName+="B";
-		for(int index=0; index< parameterSpaceSize;index++){
+		for(int index=0; index< ps.getParameterSpaceSize();index++){
 			ics[index] = new IC();
-			Model probModel = new GroupModel(states,(byte)1,
+			Model probModel = new GroupModel(ps.getStates(),ps.getGrouping(),
 					new byte[]{1,1,1,1,0});
 			ICGenerator icGen = new ICGenerator(probModel);
-			byte[] ic = icGen.getIC1D(latticeSize);
-			icGen.getClass().getMethod("getIC"+dimensions+"D", int.class).invoke(icGen,latticeSize);
-			ics[index].getClass().getMethod("set"+dimensions+"D", Class.forName(arrayName)).invoke(ics[index],ic);
+			byte[] ic = icGen.getIC1D(ps.getLatticeSize());
+			icGen.getClass().getMethod("getIC"+ps.getDimensions()+"D", int.class).invoke(icGen,ps.getLatticeSize());
+			ics[index].getClass().getMethod("set"+ps.getDimensions()+"D", Class.forName(arrayName)).invoke(ics[index],ic);
 			System.out.println(index);
 		}
 	}
 	public static void main(String[] args) throws Exception{
 		GeneticAlgorithm ga = new GeneticAlgorithm();
-		ga.InterateGeneration((byte)6,(byte)2,149,(byte)1,100,10000,100);
+		ParameterSet ps = new ParameterSet();
+		ps.setDimensions((byte)1);
+		ps.setGrouping((byte)2);
+		ps.setLatticeSize(149);
+		ps.setParameterSpaceSize(10000);
+		ps.setPopulationSize(100);
+		ps.setRadius((byte)6);
+		ps.setStates((byte)2);
+		ps.setTurns((byte)100);
+		Hybridizer geneticBit  = new Hybridizer((byte)20);
+		ga.run(2,ps,geneticBit);
 	}
 }

@@ -1,10 +1,6 @@
 package simulator.rawSimulators;
 import java.io.IOException;
-import probabilityModel.GroupModel;
 import simulator.CA;
-import simulator.ICGenerator;
-import imageManipulation.AutomataDisplayer;
-import imageManipulation.States;
 
 public class OneDSimulator {
 	private int _latticeSize;
