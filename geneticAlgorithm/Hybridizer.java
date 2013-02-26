@@ -15,9 +15,15 @@ public class Hybridizer {
 		_randMutatorBase = new Random(System.currentTimeMillis()+141);
 		_randMutatorMask = new Random(System.currentTimeMillis()+71);
 	}
-	public CA[] hybridize(CA[] population, byte childLimit){
+	public CA[] hybridize(CA[] population, byte childLimit, ParameterSet ps){
 		Arrays.sort(population);
 		int populationSize = removeWorst(population);
+		if(populationSize==0){
+			for(int index=0; index<population.length;index++){
+				population[index]= new CA(ps.getStates());
+			}
+			return population;
+		}
 		int targetPopulation = population.length;
 		int initialDefecit = targetPopulation - populationSize;
 		int defecit = initialDefecit-1;
@@ -28,7 +34,7 @@ public class Hybridizer {
                     				  %populationSize)+initialDefecit];
 			//System.out.println("YY"+mother);
 			defecit = crossBreed(population, mother, father,childLimit,
-					targetPopulation,defecit);
+					targetPopulation,defecit,ps);
 		}
 		return population;
 	}
@@ -42,13 +48,10 @@ public class Hybridizer {
 		}
 		int numberToRemove = numberLeft-_keepZone;
 		int start = CAs.length - numberLeft;
-		System.out.println("QQ"+numberLeft);
 		for(int index = start; index< start +numberToRemove;index++){
-			System.out.println("PP"+index);
 			CAs[index]=null;
 			numberLeft--;
 		}
-		System.out.println("QQ"+numberLeft);
 		return numberLeft;
 	}
 	private int getNonZero(CA[] CAs){
@@ -63,16 +66,15 @@ public class Hybridizer {
 		return removedCtr;
 	}
 	private int crossBreed(CA[] CAs,CA mother, CA father, 
-			int offSpring, int targetPopulation, int defecit){
+			int offSpring, int targetPopulation, int defecit, ParameterSet ps){
 		byte[] motherKey = mother.getKey();
 		byte[] fatherKey = father.getKey();
 		for(int index=0; index<offSpring && defecit >= 0;index++){
-			CA child = new CA((byte)2);
+			CA child = new CA(ps.getStates());
 			cross(child.getKey(), motherKey, fatherKey);
 			mutate(child.getKey());
 			//System.out.println("CC"+child.toString());
 			CAs[defecit]=child;
-			System.out.println(defecit);
 			defecit--;
 		}
 		return defecit;
@@ -129,7 +131,7 @@ public class Hybridizer {
 		someCAs[6]=ca7;
 		someCAs[7]=ca8;
 		someCAs[8]=new CA((byte)2);
-		CA[] nextGen= h.hybridize(someCAs,(byte)2);
+		CA[] nextGen= h.hybridize(someCAs,(byte)2, new ParameterSet());
 		for(CA c : nextGen){
 			if(c!=null){
 				System.out.println(c);

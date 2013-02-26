@@ -22,10 +22,11 @@ public class GeneticAlgorithm {
 		Simulation[] sims = new Simulation[ps.getPopulationSize()];
 		CA[] population = new CA[ps.getPopulationSize()];
 		for(int index =0; index < generations; index++){
+			System.out.println("GENERATION "+index);
 			setUpParameterSpace(ics, ps);
 			setUpPopulation(sims, population, ics, ps);
 			iterateGeneration(ics, sims, population, ps);
-			geneticBit.hybridize(population, (byte)2);
+			geneticBit.hybridize(population, (byte)2,ps);
 			threadPool = Executors.newFixedThreadPool(100);
 		}
 	}
@@ -42,9 +43,12 @@ public class GeneticAlgorithm {
 		System.out.println("x");
 		for(int index=0; index<ps.getPopulationSize(); index++)
 		{
-			System.out.println("Thread " + index + " solved  "+
+			if(population[index].problemsSolved()!=0){
+				System.out.println("Thread " + index + " solved  "+
 					population[index].problemsSolved());
+			}
 		}
+		
 	}
 	private void setUpPopulation(Simulation[] sims, CA[] population,IC[] ics, ParameterSet ps){
 		SimulatorAdapterFactory saf = SimulatorAdapterFactory.getInstance();
@@ -64,13 +68,11 @@ public class GeneticAlgorithm {
 		arrayName+="B";
 		for(int index=0; index< ps.getParameterSpaceSize();index++){
 			ics[index] = new IC();
-			Model probModel = new GroupModel(ps.getStates(),ps.getGrouping(),
-					new byte[]{1,1,1,1,0});
+			Model probModel = new GroupModel(ps.getStates(),ps.getGrouping(),new byte[]{1,0});
 			ICGenerator icGen = new ICGenerator(probModel);
 			byte[] ic = icGen.getIC1D(ps.getLatticeSize());
 			icGen.getClass().getMethod("getIC"+ps.getDimensions()+"D", int.class).invoke(icGen,ps.getLatticeSize());
 			ics[index].getClass().getMethod("set"+ps.getDimensions()+"D", Class.forName(arrayName)).invoke(ics[index],ic);
-			System.out.println(index);
 		}
 	}
 	public static void main(String[] args) throws Exception{
@@ -85,6 +87,6 @@ public class GeneticAlgorithm {
 		ps.setStates((byte)2);
 		ps.setTurns((byte)100);
 		Hybridizer geneticBit  = new Hybridizer((byte)20);
-		ga.run(2,ps,geneticBit);
+		ga.run(20,ps,geneticBit);
 	}
 }

@@ -12,7 +12,6 @@ public class Simulation implements Runnable{
 	private byte _radius;
 	private HashMap<Integer,byte[][]> _finalImageBlock;
 	private IC[] _configurations;
-	private int _id =0;
 	public Simulation(){
 	}
 	public void setUp(SimulatorAdapter sim, byte turns,
@@ -24,7 +23,6 @@ public class Simulation implements Runnable{
 		_radius = radius;
 		_configurations = configurations;
 		_sim.setUp(turns, latticeSize);
-		_id = id;
 	}
 	public HashMap<Integer,byte[][]> getFinalImageOutput(){
 		return _finalImageBlock;
@@ -43,8 +41,6 @@ public class Simulation implements Runnable{
 					e.printStackTrace();
 				}*/
 			}
-			//System.out.println(index);
 		}
-		System.out.println(_id);
 	}
 }
