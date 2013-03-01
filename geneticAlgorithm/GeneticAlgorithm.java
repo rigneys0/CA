@@ -70,23 +70,23 @@ public class GeneticAlgorithm {
 			ics[index] = new IC();
 			Model probModel = new GroupModel(ps.getStates(),ps.getGrouping(),new byte[]{1,0});
 			ICGenerator icGen = new ICGenerator(probModel);
-			byte[] ic = icGen.getIC1D(ps.getLatticeSize());
-			icGen.getClass().getMethod("getIC"+ps.getDimensions()+"D", int.class).invoke(icGen,ps.getLatticeSize());
+			//byte[][] ic = icGen.getIC1D(ps.getLatticeSize());
+			Object ic = icGen.getClass().getMethod("getIC"+ps.getDimensions()+"D", int.class).invoke(icGen,ps.getLatticeSize());
 			ics[index].getClass().getMethod("set"+ps.getDimensions()+"D", Class.forName(arrayName)).invoke(ics[index],ic);
 		}
 	}
 	public static void main(String[] args) throws Exception{
 		GeneticAlgorithm ga = new GeneticAlgorithm();
 		ParameterSet ps = new ParameterSet();
-		ps.setDimensions((byte)1);
-		ps.setGrouping((byte)2);
-		ps.setLatticeSize(149);
-		ps.setParameterSpaceSize(10000);
-		ps.setPopulationSize(100);
-		ps.setRadius((byte)6);
-		ps.setStates((byte)2);
-		ps.setTurns((byte)100);
-		Hybridizer geneticBit  = new Hybridizer((byte)20);
-		ga.run(20,ps,geneticBit);
+		ps.setDimensions(Byte.parseByte(args[0]));
+		ps.setLatticeSize(Integer.parseInt(args[1]));
+		ps.setParameterSpaceSize(Integer.parseInt(args[2]));
+		ps.setPopulationSize(Integer.parseInt(args[3]));
+		ps.setStates(Byte.parseByte(args[4]));
+		ps.setRadius(Byte.parseByte(args[5]));
+		ps.setTurns(Byte.parseByte(args[6]));
+		ps.setGrouping(Byte.parseByte(args[7]));
+		Hybridizer geneticBit  = new Hybridizer(Byte.parseByte(args[8]));
+		ga.run(Byte.parseByte(args[9]),ps,geneticBit);
 	}
 }

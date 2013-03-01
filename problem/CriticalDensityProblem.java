@@ -2,7 +2,7 @@ package problem;
 
 public class CriticalDensityProblem{
 
-	private static CriticalDensityProblem instance=null; 
+	//private static CriticalDensityProblem instance=null; 
 	private int[] _states;
 	public CriticalDensityProblem(byte numberOfStates){
 		_states = new int[numberOfStates];

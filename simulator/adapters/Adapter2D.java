@@ -14,7 +14,7 @@ public class Adapter2D implements SimulatorAdapter {
 	private HashMap<Integer,byte[][]> _finalImageBlock;
 	private byte[][][] _storage;
 	private CriticalDensityProblem _pcd;
-	private int _imageBlockCounter;
+	//private int _imageBlockCounter;
 	private byte _turns;
 	private int _latticeSize; 
 	public Adapter2D(){
@@ -48,13 +48,13 @@ public class Adapter2D implements SimulatorAdapter {
 		return _pcd.solves2DProblem(ic, finalRow);
 	}
 	private void reset(){
-		_imageBlockCounter = 0;
+		//_imageBlockCounter = 0;
 		_finalImageBlock.clear();
 	}
-	private void createFinalImageBlock(byte[][] output){
+	/*private void createFinalImageBlock(byte[][] output){
 		_finalImageBlock.put(_imageBlockCounter, output);
 		_imageBlockCounter++;
-	}
+	}*/
     public static void main(String[] args){
     	
     }

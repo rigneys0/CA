@@ -4,13 +4,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import imageManipulation.AutomataDisplayer;
-import imageManipulation.States;
-import probabilityModel.GroupModel;
 import problem.CriticalDensityProblem;
 import simulator.CA;
 import simulator.IC;
-import simulator.ICGenerator;
 import simulator.rawSimulators.OneDSimulator;
 
 public class Adapter1D implements SimulatorAdapter{
