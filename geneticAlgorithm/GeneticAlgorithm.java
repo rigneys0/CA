@@ -68,7 +68,7 @@ public class GeneticAlgorithm {
 		arrayName+="B";
 		for(int index=0; index< ps.getParameterSpaceSize();index++){
 			ics[index] = new IC();
-			Model probModel = new GroupModel(ps.getStates(),ps.getGrouping(),new byte[]{1,0});
+			Model probModel = new GroupModel(ps.getStates(),ps.getGrouping(),ps.getProbabilities());
 			ICGenerator icGen = new ICGenerator(probModel);
 			//byte[][] ic = icGen.getIC1D(ps.getLatticeSize());
 			Object ic = icGen.getClass().getMethod("getIC"+ps.getDimensions()+"D", int.class).invoke(icGen,ps.getLatticeSize());
@@ -86,6 +86,7 @@ public class GeneticAlgorithm {
 		ps.setRadius(Byte.parseByte(args[5]));
 		ps.setTurns(Byte.parseByte(args[6]));
 		ps.setGrouping(Byte.parseByte(args[7]));
+		ps.setProbabilities(new byte[]{1,1,1,1,0});
 		Hybridizer geneticBit  = new Hybridizer(Byte.parseByte(args[8]));
 		ga.run(Byte.parseByte(args[9]),ps,geneticBit);
 	}

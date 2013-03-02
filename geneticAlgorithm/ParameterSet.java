@@ -9,6 +9,7 @@ public class ParameterSet {
 	private int _parameterSpaceSize;
 	private byte _radius;
 	private byte _groupSize;
+	private byte[] _probabilities;
 	public ParameterSet(){
 		
 	}
@@ -27,6 +28,9 @@ public class ParameterSet {
 	public void setStates(byte states){
 		_states = states;
 	}
+	public void setProbabilities(byte[] probabilities){
+		_probabilities = probabilities;
+	}
 	public void setPopulationSize(int populationSize){
 		_populationSize = populationSize;
 	}
@@ -35,6 +39,9 @@ public class ParameterSet {
 	}
 	public void setRadius(byte radius){
 		_radius = radius;
+	}
+	public byte[] getProbabilities(){
+		return _probabilities;
 	}
 	public byte getRadius(){
 		return _radius;
