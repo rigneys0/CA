@@ -86,14 +86,14 @@ public class Hybridizer {
 		}
 	}
 	private void mutate(byte[] childKey){
-		byte position = (byte)(_randMutatorMask.nextInt() % 8);
+		byte position = (byte)(_randMutatorMask.nextInt() % 3);
 		byte base = (byte)(_randMutatorBase.nextInt()%2);
 		byte mask = (byte)(base << position);
 		for(byte index=0; index<position; index++){
 			childKey[index] = (byte)(childKey[index] ^ mask);
 			base = (byte)(_randMutatorBase.nextInt()%2);
 			mask = (byte)(base << position);
-			position = (byte)(_randMutatorMask.nextInt() % 8);
+			position = (byte)(_randMutatorMask.nextInt() % 3);
 		}
 	}
 	public static void main(String[] args){

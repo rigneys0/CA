@@ -15,7 +15,7 @@ import simulator.adapters.SimulatorAdapterFactory;
 public class GeneticAlgorithm {
 	private ExecutorService threadPool = null;
 	public GeneticAlgorithm(){
-		threadPool = Executors.newFixedThreadPool(100);
+		threadPool = Executors.newFixedThreadPool(36);
 	}
 	public void run(int generations, ParameterSet ps, Hybridizer geneticBit) throws Exception{
 		IC[] ics = new IC[ps.getParameterSpaceSize()];
@@ -27,7 +27,7 @@ public class GeneticAlgorithm {
 			setUpPopulation(sims, population, ics, ps);
 			iterateGeneration(ics, sims, population, ps);
 			geneticBit.hybridize(population, (byte)2,ps);
-			threadPool = Executors.newFixedThreadPool(100);
+			threadPool = Executors.newFixedThreadPool(30);
 		}
 	}
 	private void iterateGeneration(IC[] ics, Simulation[] sims,CA[] population,ParameterSet ps) throws Exception {
@@ -44,7 +44,7 @@ public class GeneticAlgorithm {
 		for(int index=0; index<ps.getPopulationSize(); index++)
 		{
 			if(population[index].problemsSolved()!=0){
-				System.out.println("Thread " + index + " solved  "+
+				System.out.println(population[index] + " solved  "+
 					population[index].problemsSolved());
 			}
 		}
@@ -86,7 +86,12 @@ public class GeneticAlgorithm {
 		ps.setRadius(Byte.parseByte(args[5]));
 		ps.setTurns(Byte.parseByte(args[6]));
 		ps.setGrouping(Byte.parseByte(args[7]));
-		ps.setProbabilities(new byte[]{1,1,1,1,0});
+		byte[] probabilities = new byte[args.length-10];
+		for(int index=10; index<args.length;index++){
+			probabilities[index-10] = Byte.parseByte(args[index]);
+			System.out.print(probabilities[index-10] + " ");
+		}
+		ps.setProbabilities(probabilities);
 		Hybridizer geneticBit  = new Hybridizer(Byte.parseByte(args[8]));
 		ga.run(Byte.parseByte(args[9]),ps,geneticBit);
 	}

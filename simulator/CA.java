@@ -10,7 +10,7 @@ public class CA implements Comparable<CA>{
 	public CA(byte states){
 		_numberSolved = 0;
 		_states = states;
-		_key = new byte[64];
+		_key = new byte[1024];
 		generateKey();
 	}
 	public byte[] getKey(){
@@ -21,7 +21,7 @@ public class CA implements Comparable<CA>{
 	}
 	public byte parseRule(long neighbourhoodValue){
 		//long xOROfNeighbourValWithKey = (getKey() ^ neighbourhoodValue);
-		return _key[(int) (Math.abs(neighbourhoodValue) % 64)];
+		return _key[(int) (Math.abs(neighbourhoodValue) % 1024)];
 	}
 	public void solvesProblem(){
 		_numberSolved++;
@@ -41,7 +41,7 @@ public class CA implements Comparable<CA>{
 		return compareTo((CA)other)==0;
 	}
 	private void generateKey(){
-		for(int index=0; index<64;index++){
+		for(int index=0; index<1024;index++){
 			_key[index] = (byte) Math.abs(_keyGen.nextInt() % _states);
 		}
 	}
