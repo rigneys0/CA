@@ -14,7 +14,7 @@ public class SimulatorAdapterFactory {
 		}
 		return instance;
 	}
-	public SimulatorAdapter getSimulator(int dimensions){
+	public SimulatorAdapter getSimulator(byte dimensions){
 		try{
 			if(available.isEmpty()){
 				SimulatorAdapter someSim=
